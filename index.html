@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <title>CodePen - Snowman help</title>
+  <link rel="stylesheet" href="./style.css">
+
+</head>
+
+<body>
+  <!-- partial:index.partial.html -->
+  <!-- partial -->
+  <script src='https://cdnjs.cloudflare.com/ajax/libs/three.js/96/three.min.js'></script>
+  <script src='https://s3-us-west-2.amazonaws.com/s.cdpn.io/264161/OrbitControls.js'></script>
+  <script src='https://cdn.rawgit.com/mrdoob/three.js/r92/examples/js/loaders/GLTFLoader.js'></script>
+  <!-- <script src="./script.js"></script> -->
+
+  <!-- <button type="button" class="NextButton" onclick="animateNext()">Next Animation</button> -->
+  <button onclick="animateNext()">Next Animation</button>
+
+  <div id="ternRender"></div>
+
+  <script>
+
+
+
+
+    var mixer
+    var action;
+    var clock = new THREE.Clock();
+    var scene = new THREE.Scene();
+    var camera = new THREE.PerspectiveCamera(90, window.innerWidth / window.innerHeight, 0.1, 1000);
+    // camera.position.z = 5;
+
+    //PLANE
+    var geometry = new THREE.PlaneGeometry(4, 4, 4);
+    var material = new THREE.MeshPhongMaterial({ color: 'white', side: THREE.DoubleSide });
+    var plane = new THREE.Mesh(geometry, material);
+    plane.rotation.x = - Math.PI / 2;
+    plane.position.set(0, -0.9, 0);
+    scene.add(plane);
+
+    //LIGHT
+    var ambientLight = new THREE.AmbientLight(0xffffff, 0.7);
+    scene.add(ambientLight);
+    light = new THREE.PointLight(0xffffff, 0.8, 18);
+    light.position.set(0, 2, 4);
+    light.castShadow = true;
+    light.shadow.camera.near = 0.1;
+    light.shadow.camera.far = 25;
+    scene.add(light);
+    camera.position.z = 5;
+    camera.position.set(0, 0, 3);     // object position zoom on Z axis
+
+    // orbit 3d env
+
+    var controls = new THREE.OrbitControls(camera);
+    controls.update();
+
+    var renderer = new THREE.WebGLRenderer();
+    renderer.setSize(window.innerWidth / 1.2, window.innerHeight / 1.2);
+    document.body.appendChild(renderer.domElement);   //in react use ref
+    renderer.setClearColor('lightgreen');
+
+
+    // GLTF loader 
+
+    var loader = new THREE.GLTFLoader();
+
+    loader.load('tern_construct_animation.gltf', function (gltf) {
+
+      // Taking animations from  gltf
+
+      mixer = new THREE.AnimationMixer(gltf.scene);
+
+
+
+      //-- Playing all animations of gltf 
+
+      // gltf.animations.forEach((clip) => {
+      //   mixer
+      //     .clipAction(clip)
+      //     .play();
+      // });
+
+
+
+
+      renderAnimation = (counter) => {
+
+        var action = mixer.clipAction(gltf.animations[counter]);   //getting single animation
+        // alert(counter)
+        action.play();
+
+
+      };
+
+
+
+      scene.add(gltf.scene);
+      action.setLoop(THREE.LoopOnce);
+      gltf.scene.position.set(0, -1, 0);
+
+    },
+    );
+
+    var counter = 0;
+
+
+
+    const animateNext = () => {
+      counter = counter + 1;
+      // alert(counter)
+      renderAnimation(counter);
+      // gltf.animations.forEach((clip) => {
+      //   mixer
+      //     .clipAction(clip)
+      //     .play();
+      //   // alert(clip)
+
+    }
+
+
+
+
+
+
+
+
+
+    var animate = () => {
+
+      requestAnimationFrame(animate);
+
+      var delta = clock.getDelta();
+      if (mixer !== null) {
+        mixer.update(delta);
+      };
+      renderer.render(scene, camera);
+    };
+
+    animate();
+
+
+  </script>
+
+
+
+
+
+</body>
+
+</html>

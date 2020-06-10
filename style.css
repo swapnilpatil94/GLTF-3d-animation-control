@@ -1,0 +1,10 @@
+html, body {
+  margin:0;
+  /* overflow:hidden */
+}
+
+.NextButton{
+  position:absolute;
+  top: 100;
+  z-index: 100;
+}
