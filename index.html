@@ -3,29 +3,24 @@
 
 <head>
   <meta charset="UTF-8">
-  <title>CodePen - Snowman help</title>
+  <title>GLTF - Swapnil</title>
   <link rel="stylesheet" href="./style.css">
 
 </head>
 
 <body>
-  <!-- partial:index.partial.html -->
-  <!-- partial -->
-  <script src='https://cdnjs.cloudflare.com/ajax/libs/three.js/96/three.min.js'></script>
-  <script src='https://s3-us-west-2.amazonaws.com/s.cdpn.io/264161/OrbitControls.js'></script>
-  <script src='https://cdn.rawgit.com/mrdoob/three.js/r92/examples/js/loaders/GLTFLoader.js'></script>
+
+  <script src='/three.min.js'></script>
+  <script src='/OrbitControls.js'></script>
+  <script src='/GLTFLoader.js'></script>
   <!-- <script src="./script.js"></script> -->
 
   <!-- <button type="button" class="NextButton" onclick="animateNext()">Next Animation</button> -->
-  <button onclick="animateNext()">Next Animation</button>
+  <button class="NextButton button " onclick="animateNext()">Next Animation</button>
 
   <div id="ternRender"></div>
 
   <script>
-
-
-
-
     var mixer
     var action;
     var clock = new THREE.Clock();
@@ -74,8 +69,6 @@
 
       mixer = new THREE.AnimationMixer(gltf.scene);
 
-
-
       //-- Playing all animations of gltf 
 
       // gltf.animations.forEach((clip) => {
@@ -84,48 +77,25 @@
       //     .play();
       // });
 
-
-
-
       renderAnimation = (counter) => {
 
         var action = mixer.clipAction(gltf.animations[counter]);   //getting single animation
-        // alert(counter)
         action.play();
 
 
       };
 
-
-
       scene.add(gltf.scene);
       action.setLoop(THREE.LoopOnce);
       gltf.scene.position.set(0, -1, 0);
-
-    },
-    );
+    });
 
     var counter = 0;
 
-
-
     const animateNext = () => {
       counter = counter + 1;
-      // alert(counter)
       renderAnimation(counter);
-      // gltf.animations.forEach((clip) => {
-      //   mixer
-      //     .clipAction(clip)
-      //     .play();
-      //   // alert(clip)
-
     }
-
-
-
-
-
-
 
 
 
